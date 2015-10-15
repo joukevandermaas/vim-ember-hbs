@@ -2,37 +2,33 @@ if exists("b:current_syntax")
   finish
 endif
 
-" Because of vim's syntax rules, our syntax definitions
-" can get overwritten by e.g. the <a href>underlined</a>
-" styling, so we need to turn that off.
-if exists("html_no_rendering")
-  let save_no_rendering = html_no_rendering
-endif
-let html_no_rendering = 1
 runtime! syntax/html.vim
-if exists("save_no_rendering")
-  let html_no_rendering = test
-endif
+syn cluster htmlPreproc add=hbsMustache,hbsUnescaped,hbsMustacheBlock,hbsComment
 
-syntax region hbsMustache matchgroup=hbsHandles start="\v\{\{" end="\v\}\}" contains=hbsKeyword,hbsIdentifier,hbsString,hbsHash,hbsNumber keepend
-syntax region hbsUnescaped matchgroup=hbsHandles start="\v\{\{\{" end="\v\}\}\}" contains=hbsUnescapedIdentifier keepend
-syntax region hbsMustacheBlock matchgroup=hbsHandles start="\v\{\{[#/]" end="\v\}\}" contains=hbsBlockKeyword,hbsIdentifier,hbsString,hbsHash,hbsNumber keepend
+syntax region hbsMustache matchgroup=hbsHandles start="\v\{\{" end="\v\}\}" keepend containedin=@htmlHbsContainer
+syntax region hbsUnescaped matchgroup=hbsHandles start="\v\{\{\{" end="\v\}\}\}" keepend containedin=@htmlHbsContainer
+syntax region hbsMustacheBlock matchgroup=hbsHandles start="\v\{\{[#/]" end="\v\}\}" keepend containedin=@htmlHbsContainer
+syntax region hbsHelper matchgroup=hbsOperator start="\v\=\("ms=s+1 end="\v\)" keepend containedin=hbsMustache,hbsMustacheBlock
 
-syntax match hbsIdentifier "\v(\s|\=|\.)@<!<\S+>" contained
-syntax match hbsUnescapedIdentifier "\v(\s|\=|\.)@<!<\S+>" contained
+syntax match hbsIdentifier "\v(\{\{[#/]?|\()@<=<\S+>" contained containedin=hbsMustache,hbsMustacheBlock,hbsHelper
+syntax match hbsUnescapedIdentifier "\v(\{\{\{)@<=<\S+>" contained containedin=hbsUnescaped
 
-syntax match hbsKeyword "\v(\s|\=|\.)@<!<(if|action|link-to|unless|else|input|unbound)>" contained
-syntax match hbsBlockKeyword "\v(\s|\=|\.)@<!<(if|each|each-in|link-to|unless)>" contained
+syntax match hbsKeyword "\v(\{\{|\()@<=<(if|action|link-to|unless|else\ if|else|input|unbound)>" contained containedin=hbsMustache,hbsHelper
+syntax match hbsKeyword "\v(\{\{[#/])@<=<(if|each|each-in|link-to|unless)>" contained containedin=hbsMustacheBlock
+syntax match hbsKeyword "\v\s+as\s+" contained containedin=hbsMustacheBlock
+syntax region hbsStatement matchgroup=hbsOperator start="\v\|" end="\v\|" contained containedin=hbsMustacheBlock
 
-syntax region hbsString matchgroup=hbsString start=/\v\"/ skip=/\v\\\"/ end=/\v\"/ contained
-syntax match hbsNumber "\v<\d+>" contained
+syntax region hbsString matchgroup=hbsString start=/\v\"/ skip=/\v\\\"/ end=/\v\"/ contained containedin=hbsMustache,hbsMustacheBlock,hbsHelper
+syntax region hbsString matchgroup=hbsString start=/\v\'/ skip=/\v\\\'/ end=/\v\'/ contained containedin=hbsMustache,hbsMustacheBlock,hbsHelper
+syntax match hbsNumber "\v<\d+>" contained containedin=hbsMustache,hbsMustacheBlock,hbsHelper
 
-syntax region hbsComment start="\v\{\{\!" end="\v\}\}"
-syntax region hbsComment start="\v\{\{\!\-\-" end="\v\-\-\}\}"
+syntax region hbsComment start="\v\{\{\!" end="\v\}\}" containedin=@htmlHbsContainer
+syntax region hbsComment start="\v\{\{\!\-\-" end="\v\-\-\}\}" containedin=@htmlHbsContainer
 
 highlight link hbsKeyword Keyword
-highlight link hbsBlockKeyword Keyword
-highlight link hbsIdentifier Identifier
+highlight link hbsOperator Define
+highlight link hbsIdentifier Function
+highlight link hbsProperty Type
 highlight link hbsUnescapedIdentifier Keyword
 highlight link hbsString String
 highlight link hbsNumber Number
