@@ -3,27 +3,33 @@ if exists("b:current_syntax")
 endif
 
 runtime! syntax/html.vim
-syn cluster htmlPreproc add=hbsMustache,hbsUnescaped,hbsMustacheBlock,hbsComment
+syntax cluster htmlPreproc add=hbsMustache,hbsUnescaped,hbsMustacheBlock,hbsComment,hbsElseBlock,hbsEscapedMustache
 
-syntax region hbsMustache matchgroup=hbsHandles start="\v\{\{" end="\v\}\}" keepend containedin=@htmlHbsContainer
-syntax region hbsUnescaped matchgroup=hbsHandles start="\v\{\{\{" end="\v\}\}\}" keepend containedin=@htmlHbsContainer
-syntax region hbsMustacheBlock matchgroup=hbsHandles start="\v\{\{[#/]" end="\v\}\}" keepend containedin=@htmlHbsContainer
-syntax region hbsHelper matchgroup=hbsOperator start="\v\=\("ms=s+1 end="\v\)" keepend containedin=hbsMustache,hbsMustacheBlock
+syntax match hbsEscapedMustache "\v\\\{\{"
 
-syntax match hbsIdentifier "\v(\{\{[#/]?|\()@<=<\S+>" contained containedin=hbsMustache,hbsMustacheBlock,hbsHelper
+syntax region hbsMustache matchgroup=hbsHandles start="\v\{\{" skip="\v\\\}\}" end="\v\}\}" keepend
+syntax region hbsUnescaped matchgroup=hbsHandles start="\v\{\{\{" skip="\v\\\}\}\}" end="\v\}\}\}" keepend
+syntax region hbsMustacheBlock matchgroup=hbsHandles start="\v\{\{[#/]" skip="\v\\\}\}" end="\v\}\}" keepend
+" modern hbs supports {{else <block>}} where <block> starts a new block
+syntax region hbsElseBlock matchgroup=hbsHandles start="\v\{\{else\ "rs=e-5 skip="\v\\\}\}" end="\v\}\}" keepend
+syntax region hbsHelper matchgroup=hbsOperator start="\v\=\("ms=s+1 end="\v\)" keepend contained containedin=hbsMustache,hbsMustacheBlock,hbsElseBlock
+
+syntax match hbsIdentifier "\v(\{\{([#/]|else\ )?|\()@<=<\S+>" contained containedin=hbsMustache,hbsMustacheBlock,hbsHelper,hbsElseBlock
 syntax match hbsUnescapedIdentifier "\v(\{\{\{)@<=<\S+>" contained containedin=hbsUnescaped
 
-syntax match hbsKeyword "\v(\{\{|\()@<=<(if|action|link-to|unless|else\ if|else|input|unbound|yield|outlet)>" contained containedin=hbsMustache,hbsHelper
-syntax match hbsKeyword "\v(\{\{[#/])@<=<(if|each|each-in|link-to|unless)>" contained containedin=hbsMustacheBlock
-syntax match hbsKeyword "\v\s+as\s+" contained containedin=hbsMustacheBlock
-syntax region hbsStatement matchgroup=hbsOperator start="\v\|" end="\v\|" contained containedin=hbsMustacheBlock
+syntax match hbsKeyword "\v(\{\{)@<=<else>" contained containedin=hbsElseBlock
+syntax match hbsKeyword "\v\(@<=<(if|action|unless|unbound)>" contained containedin=hbsHelper
+syntax match hbsKeyword "\v(\{\{)@<=<(if|action|link-to|unless|input|unbound|yield|outlet|else)>" contained containedin=hbsMustache
+syntax match hbsKeyword "\v(\{\{([#/]|else\ ))@<=<(if|each\-in|each|link-to|unless)>" contained containedin=hbsMustacheBlock,hbsElseBlock
+syntax match hbsKeyword "\v\s+as\s+" contained containedin=hbsMustacheBlock,hbsElseBlock
+syntax region hbsStatement matchgroup=hbsOperator start="\v\|" end="\v\|" contained containedin=hbsMustacheBlock,hbsElseBlock
 
-syntax region hbsString matchgroup=hbsString start=/\v\"/ skip=/\v\\\"/ end=/\v\"/ contained containedin=hbsMustache,hbsMustacheBlock,hbsHelper
-syntax region hbsString matchgroup=hbsString start=/\v\'/ skip=/\v\\\'/ end=/\v\'/ contained containedin=hbsMustache,hbsMustacheBlock,hbsHelper
-syntax match hbsNumber "\v<\d+>" contained containedin=hbsMustache,hbsMustacheBlock,hbsHelper
+syntax region hbsString matchgroup=hbsString start=/\v\"/ skip=/\v\\\"/ end=/\v\"/ contained containedin=hbsMustache,hbsMustacheBlock,hbsHelper,hbsElseBlock
+syntax region hbsString matchgroup=hbsString start=/\v\'/ skip=/\v\\\'/ end=/\v\'/ contained containedin=hbsMustache,hbsMustacheBlock,hbsHelper,hbsElseBlock
+syntax match hbsNumber "\v<\d+>" contained containedin=hbsMustache,hbsMustacheBlock,hbsHelper,hbsElseBlock
 
-syntax region hbsComment start="\v\{\{\!" end="\v\}\}" containedin=@htmlHbsContainer
-syntax region hbsComment start="\v\{\{\!\-\-" end="\v\-\-\}\}" containedin=@htmlHbsContainer
+syntax region hbsComment start="\v\{\{\!" end="\v\}\}" keepend
+syntax region hbsComment start="\v\{\{\!\-\-" end="\v\-\-\}\}" keepend
 
 highlight link hbsKeyword Keyword
 highlight link hbsOperator Define
