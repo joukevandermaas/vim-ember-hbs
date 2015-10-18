@@ -13,7 +13,7 @@ syntax region hbsHelper matchgroup=hbsOperator start="\v\=\("ms=s+1 end="\v\)" k
 syntax match hbsIdentifier "\v(\{\{[#/]?|\()@<=<\S+>" contained containedin=hbsMustache,hbsMustacheBlock,hbsHelper
 syntax match hbsUnescapedIdentifier "\v(\{\{\{)@<=<\S+>" contained containedin=hbsUnescaped
 
-syntax match hbsKeyword "\v(\{\{|\()@<=<(if|action|link-to|unless|else\ if|else|input|unbound)>" contained containedin=hbsMustache,hbsHelper
+syntax match hbsKeyword "\v(\{\{|\()@<=<(if|action|link-to|unless|else\ if|else|input|unbound|yield|outlet)>" contained containedin=hbsMustache,hbsHelper
 syntax match hbsKeyword "\v(\{\{[#/])@<=<(if|each|each-in|link-to|unless)>" contained containedin=hbsMustacheBlock
 syntax match hbsKeyword "\v\s+as\s+" contained containedin=hbsMustacheBlock
 syntax region hbsStatement matchgroup=hbsOperator start="\v\|" end="\v\|" contained containedin=hbsMustacheBlock
