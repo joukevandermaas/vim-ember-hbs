@@ -19,7 +19,7 @@ syntax match hbsUnescapedIdentifier "\v(\{\{\{)@<=<\S+>" contained containedin=h
 
 syntax match hbsKeyword "\v(\{\{)@<=<else>" contained containedin=hbsElseBlock
 syntax match hbsKeyword "\v\(@<=<(if|action|unless|unbound)>" contained containedin=hbsHelper
-syntax match hbsKeyword "\v(\{\{)@<=<(if|action|link-to|unless|input|unbound|yield|outlet|else)>" contained containedin=hbsMustache
+syntax match hbsKeyword "\v(\{\{)@<=<(if|action|link-to|unless|input|unbound|yield|outlet|else|component)>" contained containedin=hbsMustache
 syntax match hbsKeyword "\v(\{\{([#/]|else\ ))@<=<(if|each\-in|each|link-to|unless)>" contained containedin=hbsMustacheBlock,hbsElseBlock
 syntax match hbsKeyword "\v\s+as\s+" contained containedin=hbsMustacheBlock,hbsElseBlock
 syntax region hbsStatement matchgroup=hbsOperator start="\v\|" end="\v\|" contained containedin=hbsMustacheBlock,hbsElseBlock

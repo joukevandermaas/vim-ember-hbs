@@ -70,6 +70,10 @@ function! GetHandlebarsIndent(...)
   if prevLine =~# '\v\s*\{\{\#'
     let ind = ind + sw
   endif
+  " but not if the block ends on the same line
+  if prevLine =~# '\v\s*\{\{\#(.+)(\s+|\}\}).+\{\{\/\1'
+    let ind = ind - sw
+  endif
   " unindent after block close {{/block}}
   if currentLine =~# '\v^\s*\{\{\/'
     let ind = ind - sw
