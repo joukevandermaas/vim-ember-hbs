@@ -12,15 +12,15 @@ syntax region hbsUnescaped matchgroup=hbsHandles start="\v\{\{\{" skip="\v\\\}\}
 syntax region hbsMustacheBlock matchgroup=hbsHandles start="\v\{\{[#/]" skip="\v\\\}\}" end="\v\}\}" keepend
 " modern hbs supports {{else <block>}} where <block> starts a new block
 syntax region hbsElseBlock matchgroup=hbsHandles start="\v\{\{else\ "rs=e-5 skip="\v\\\}\}" end="\v\}\}" keepend
-syntax region hbsHelper matchgroup=hbsOperator start="\v\=\("ms=s+1 end="\v\)" keepend contained containedin=hbsMustache,hbsMustacheBlock,hbsElseBlock
+syntax region hbsHelper matchgroup=hbsOperator start="\v\(" end="\v\)" keepend contained containedin=hbsMustache,hbsMustacheBlock,hbsElseBlock
 
 syntax match hbsIdentifier "\v(\{\{([#/]|else\ )?|\()@<=<\S+>" contained containedin=hbsMustache,hbsMustacheBlock,hbsHelper,hbsElseBlock
 syntax match hbsUnescapedIdentifier "\v(\{\{\{)@<=<\S+>" contained containedin=hbsUnescaped
 
 syntax match hbsKeyword "\v(\{\{)@<=<else>" contained containedin=hbsElseBlock
-syntax match hbsKeyword "\v\(@<=<(if|action|unless|unbound)>" contained containedin=hbsHelper
-syntax match hbsKeyword "\v(\{\{)@<=<(if|action|link-to|unless|input|unbound|yield|outlet|else|component)>" contained containedin=hbsMustache
-syntax match hbsKeyword "\v(\{\{([#/]|else\ ))@<=<(if|each\-in|each|link-to|unless)>" contained containedin=hbsMustacheBlock,hbsElseBlock
+syntax match hbsKeyword "\v\(@<=<(query-params|mut|get|if|action|unless|unbound|concat)>" contained containedin=hbsHelper
+syntax match hbsKeyword "\v(\{\{)@<=<(textarea|mut|input|get|debugger|if|action|link\-to|unless|input|unbound|yield|outlet|else|component)>" contained containedin=hbsMustache
+syntax match hbsKeyword "\v(\{\{([#/]|else\ ))@<=<(with|if|each\-in|each|link\-to|unless)>" contained containedin=hbsMustacheBlock,hbsElseBlock
 syntax match hbsKeyword "\v\s+as\s+" contained containedin=hbsMustacheBlock,hbsElseBlock
 syntax region hbsStatement matchgroup=hbsOperator start="\v\|" end="\v\|" contained containedin=hbsMustacheBlock,hbsElseBlock
 
