@@ -12,7 +12,7 @@ syntax region hbsUnescaped matchgroup=hbsHandles start="\v\{\{\{" skip="\v\\\}\}
 syntax region hbsMustacheBlock matchgroup=hbsHandles start="\v\{\{[#/]" skip="\v\\\}\}" end="\v\}\}" keepend
 " modern hbs supports {{else <block>}} where <block> starts a new block
 syntax region hbsElseBlock matchgroup=hbsHandles start="\v\{\{else\ "rs=e-5 skip="\v\\\}\}" end="\v\}\}" keepend
-syntax region hbsHelper matchgroup=hbsOperator start="\v\(" end="\v\)" keepend contained containedin=hbsMustache,hbsMustacheBlock,hbsElseBlock
+syntax region hbsHelper matchgroup=hbsOperator start="\v\(" end="\v\)" contained containedin=hbsMustache,hbsMustacheBlock,hbsElseBlock,hbsHelper
 
 syntax match hbsIdentifier "\v(\{\{([#/]|else\ )?|\()@<=<\S+>" contained containedin=hbsMustache,hbsMustacheBlock,hbsHelper,hbsElseBlock
 syntax match hbsUnescapedIdentifier "\v(\{\{\{)@<=<\S+>" contained containedin=hbsUnescaped
