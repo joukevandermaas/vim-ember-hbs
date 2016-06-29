@@ -78,6 +78,18 @@ function! GetHandlebarsIndent(...)
   if currentLine =~# '\v^\s*\{\{\/'
     let ind = ind - sw
   endif
+  " indent after component block {{a-component
+  if prevLine =~# '\v\s*\{\{\w'
+     let ind = ind + sw
+  endif
+  " but not if the component block ends on the same line
+  if prevLine =~# '\v\s*\{\{\w(.+)\}\}'
+    let ind = ind - sw
+  endif
+  " unindent }} lines
+  if currentLine =~# '\v^\s*\}\}\s*$'
+    let ind = ind - sw
+  endif
   " unindent {{else}}
   if currentLine =~# '\v^\s*\{\{else'
     let ind = ind - sw
@@ -86,6 +98,6 @@ function! GetHandlebarsIndent(...)
   if prevLine =~# '\v^\s*\{\{else'
     let ind = ind + sw
   endif
-
+ 
   return ind
 endfunction
