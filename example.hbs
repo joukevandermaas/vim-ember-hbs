@@ -1,0 +1,30 @@
+{{#block-component property=value  prop-erty=value
+  onClick=(action "someAction" withParam) as |returnValue|}}
+
+  {{#each-in foo as |bar, baz|}}
+    {{inline-component foo=bar}}
+  {{else if value}}
+  {{else with foo}}
+    \{{escaped handlebars}}
+  {{else}}
+    {{! comment }}
+    {{!-- block }}
+      TODO: Indentation is broken after that
+      comment --}}
+
+    <a href class="{{if inside 'still highlight'}}"
+      onclick={{action foo}}>
+      {{escaped}}
+      {{{unescaped}}}
+    </a>
+
+    <input type="text" oninput={{action (mut fooBar) value="target.value"}}>
+
+    {{helper "string" 123}}
+    {{input value="foo"}}
+
+    {{textarea}}
+
+  {{/each-in}}
+
+{{/block-component}}
