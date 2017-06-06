@@ -87,7 +87,7 @@ function! GetHandlebarsIndent(...)
     let ind = ind - sw
   endif
   " unindent }} lines
-  if currentLine =~# '\v^\s*\}\}\s*$' || prevLine =~# '\v^\s*[^\{\}]+\}\}\s*$'
+  if currentLine =~# '\v^\s*\}\}\s*$' || (currentLine !~# '\v^\s*\{\{\/' && prevLine =~# '\v^\s*[^\{\}]+\}\}\s*$')
     let ind = ind - sw
   endif
   " unindent {{else}}
