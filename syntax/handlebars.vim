@@ -16,7 +16,7 @@ syntax region hbsElseBlock matchgroup=hbsHandles start="\v\{\{else\ "rs=e-5 skip
 syntax region hbsPencil matchgroup=hbsOperator start="\v\(" end="\v\)" contained containedin=hbsMustache,hbsMustacheBlock,hbsElseBlock,hbsPencil
 
 " identifier is any word inside a mustache or a pencil that is not followed by a = sign (see hbsArg below)
-syntax match hbsIdentifier "\v(\(|\{\{[#/]?)@<!<(\S+)|(\@\S+)>" contained containedin=hbsMustache,hbsMustacheBlock,hbsPencil,hbsElseBlock,hbsStatement
+syntax match hbsIdentifier "\v(\(|\{\{[#/]?)@<!<(\w+)|(\@\w+)>" contained containedin=hbsMustache,hbsMustacheBlock,hbsPencil,hbsElseBlock,hbsStatement
 
 " unescaped are special forms of mustaches that don't have other stuff except for an identifier in it
 syntax region hbsUnescaped matchgroup=hbsUnescapedHandles start="\v\{\{\{" skip="\v\\\}\}\}" end="\v\}\}\}" keepend
