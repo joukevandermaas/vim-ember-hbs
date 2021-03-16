@@ -24,8 +24,8 @@ syntax match hbsUnescapedIdentifier "\v(\{\{\{)@<=<\S+>(\}\}\})" contained conta
 
 syntax match hbsMustacheName "\v(\{\{[#/]?)@<=<\S+>" contained containedin=hbsMustache,hbsMustacheBlock,hbsPencil
 syntax match hbsPencilName "\v(\()@<=<\S+>" contained containedin=hbsMustache,hbsMustacheBlock,hbsPencil
-syntax match hbsBuiltInHelper "\v\(@<=<(query-params|mut|fn|get|action|unbound|concat)>" contained containedin=hbsPencil
-syntax match hbsBuiltInHelper "\v(\{\{)@<=<(textarea|mut|input|get|action|on|input|unbound)>" contained containedin=hbsMustache
+syntax match hbsBuiltInHelper "\v\(@<=<(query-params|mut|fn|array|hash|get|action|unbound|concat)>" contained containedin=hbsPencil
+syntax match hbsBuiltInHelper "\v(\{\{)@<=<(textarea|mut|fn|array|hash|input|get|action|on|input|unbound)>" contained containedin=hbsMustache
 syntax match hbsBuiltInHelper "\v(\{\{[#/]?)@<=<(component|with|link\-to)>" contained containedin=hbsMustacheBlock,hbsElseBlock
 syntax match hbsBuiltInHelperInElse "\v(\{\{else\ )@<=<(component|link\-to)>" contained containedin=hbsMustacheBlock,hbsElseBlock
 syntax match hbsControlFlow "\v(\{\{)@<=<else>( ?)@=" contained containedin=hbsElseBlock

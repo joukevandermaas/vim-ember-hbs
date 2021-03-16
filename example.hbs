@@ -16,10 +16,12 @@
 
 <Nested::Component
   @arg={{12}}
+  @doAction={{fn this.someAction 120}}
   @argB={{hash
     foo="string"
     bar=true
     baz=120
+    yolo=(array 12 "string" (hash foo=this.something))
     bax=(fn this.someAction 120)
   }}
   as |foo|
