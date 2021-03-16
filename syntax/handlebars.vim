@@ -7,7 +7,7 @@ syntax cluster htmlPreproc add=hbsComponent,hbsMustache,hbsUnescaped,hbsMustache
 
 syntax match hbsEscapedMustache "\v\\\{\{"
 
-syntax region hbsComponent matchgroup=hbsComponentStatement start="\v\<(\/?)((\@\a+)|(((\w|-)+::)*\u\a+)|(\a+\.\a+))" end="\v\/?\>" keepend
+syntax region hbsComponent matchgroup=hbsComponentStatement start="\v\<(\/?)(\:)?((\@\a+)|(((\w|-)+::)*\u\a+)|(\a+\.\a+))" end="\v\/?\>" keepend
 syntax region hbsMustache matchgroup=hbsHandles start="\v\{\{" skip="\v\\\}\}" end="\v\}\}" containedin=hbsComponent keepend
 syntax region hbsMustacheBlock matchgroup=hbsHandles start="\v\{\{[#/]" skip="\v\\\}\}" end="\v\}\}" keepend
 " modern hbs supports {{else <block>}} where <block> starts a new block
@@ -25,8 +25,8 @@ syntax match hbsUnescapedIdentifier "\v(\{\{\{)@<=<\S+>(\}\}\})" contained conta
 syntax match hbsMustacheName "\v(\{\{[#/]?)@<=<\S+>" contained containedin=hbsMustache,hbsMustacheBlock,hbsPencil
 syntax match hbsPencilName "\v(\()@<=<\S+>" contained containedin=hbsMustache,hbsMustacheBlock,hbsPencil
 syntax match hbsBuiltInHelper "\v(\{\{)@<=<else>( ?)@=" contained containedin=hbsElseBlock
-syntax match hbsBuiltInHelper "\v\(@<=<(query-params|mut|get|if|action|unless|unbound|concat)>" contained containedin=hbsPencil
-syntax match hbsBuiltInHelper "\v(\{\{)@<=<(textarea|mut|input|get|debugger|action|unless|input|unbound|yield|outlet|else)>" contained containedin=hbsMustache
+syntax match hbsBuiltInHelper "\v\(@<=<(query-params|mut|fn|get|if|action|unless|unbound|concat)>" contained containedin=hbsPencil
+syntax match hbsBuiltInHelper "\v(\{\{)@<=<(textarea|mut|input|get|debugger|action|on|unless|input|unbound|yield|outlet|else)>" contained containedin=hbsMustache
 syntax match hbsBuiltInHelper "\v(\{\{[#/]?)@<=<(component|with|if|each(\-in)?|link\-to|unless)>" contained containedin=hbsMustacheBlock,hbsElseBlock
 syntax match hbsBuiltInHelperInElse "\v(\{\{else\ )@<=<(component|with|if|each(\-in)?|link\-to|unless)>" contained containedin=hbsMustacheBlock,hbsElseBlock
 syntax match hbsKeyword "\v\s+as\s+" contained containedin=hbsComponent,hbsMustacheBlock,hbsElseBlock
