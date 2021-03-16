@@ -18,18 +18,19 @@
   @arg={{12}}
   @argB={{hash
     foo="string"
-    bar=this.property
+    bar=true
     baz=120
     bax=(fn this.someAction 120)
   }}
   as |foo|
 >
   <:default>
-    named blocks
+    named blocks {{false}}
   </:default>
 
-  <:block as |foo|>
+  <:block as |foo, baz|>
     {{foo}}
+    <baz.component />
   </:block>
 </Nested::Component>
 

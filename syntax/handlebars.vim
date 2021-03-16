@@ -7,7 +7,7 @@ syntax cluster htmlPreproc add=hbsComponent,hbsMustache,hbsUnescaped,hbsMustache
 
 syntax match hbsEscapedMustache "\v\\\{\{"
 
-syntax region hbsComponent matchgroup=hbsComponentStatement start="\v\<(\/?)(\:)?((\@\a+)|(((\w|-)+::)*\u\a+)|(\a+\.\a+))" end="\v\/?\>" keepend
+syntax region hbsComponent matchgroup=hbsComponentStatement start="\v\<(\/?):?((\@\a+)|(((\w|-)+::)*\u\a+)|(\a+\.\a+))" end="\v\/?\>" keepend
 syntax region hbsMustache matchgroup=hbsHandles start="\v\{\{" skip="\v\\\}\}" end="\v\}\}" containedin=hbsComponent keepend
 syntax region hbsMustacheBlock matchgroup=hbsHandles start="\v\{\{[#/]" skip="\v\\\}\}" end="\v\}\}" keepend
 " modern hbs supports {{else <block>}} where <block> starts a new block
@@ -24,17 +24,21 @@ syntax match hbsUnescapedIdentifier "\v(\{\{\{)@<=<\S+>(\}\}\})" contained conta
 
 syntax match hbsMustacheName "\v(\{\{[#/]?)@<=<\S+>" contained containedin=hbsMustache,hbsMustacheBlock,hbsPencil
 syntax match hbsPencilName "\v(\()@<=<\S+>" contained containedin=hbsMustache,hbsMustacheBlock,hbsPencil
-syntax match hbsBuiltInHelper "\v(\{\{)@<=<else>( ?)@=" contained containedin=hbsElseBlock
-syntax match hbsBuiltInHelper "\v\(@<=<(query-params|mut|fn|get|if|action|unless|unbound|concat)>" contained containedin=hbsPencil
-syntax match hbsBuiltInHelper "\v(\{\{)@<=<(textarea|mut|input|get|debugger|action|on|unless|input|unbound|yield|outlet|else)>" contained containedin=hbsMustache
-syntax match hbsBuiltInHelper "\v(\{\{[#/]?)@<=<(component|with|if|each(\-in)?|link\-to|unless)>" contained containedin=hbsMustacheBlock,hbsElseBlock
-syntax match hbsBuiltInHelperInElse "\v(\{\{else\ )@<=<(component|with|if|each(\-in)?|link\-to|unless)>" contained containedin=hbsMustacheBlock,hbsElseBlock
+syntax match hbsBuiltInHelper "\v\(@<=<(query-params|mut|fn|get|action|unbound|concat)>" contained containedin=hbsPencil
+syntax match hbsBuiltInHelper "\v(\{\{)@<=<(textarea|mut|input|get|action|on|input|unbound)>" contained containedin=hbsMustache
+syntax match hbsBuiltInHelper "\v(\{\{[#/]?)@<=<(component|with|link\-to)>" contained containedin=hbsMustacheBlock,hbsElseBlock
+syntax match hbsBuiltInHelperInElse "\v(\{\{else\ )@<=<(component|link\-to)>" contained containedin=hbsMustacheBlock,hbsElseBlock
+syntax match hbsControlFlow "\v(\{\{)@<=<else>( ?)@=" contained containedin=hbsElseBlock
+syntax match hbsControlFlow "\v\(@<=<(if|unless)>" contained containedin=hbsPencil
+syntax match hbsControlFlow "\v(\{\{)@<=<(debugger|unless|yield|outlet|else)>" contained containedin=hbsMustache
+syntax match hbsControlFlow "\v(\{\{[#/]?)@<=<(with|if|each(\-in)?|unless)>" contained containedin=hbsMustacheBlock,hbsElseBlock
 syntax match hbsKeyword "\v\s+as\s+" contained containedin=hbsComponent,hbsMustacheBlock,hbsElseBlock
 syntax region hbsStatement matchgroup=hbsDelimiter start="\v\|" end="\v\|" contained containedin=hbsComponent,hbsMustacheBlock,hbsElseBlock
 
 syntax region hbsString matchgroup=hbsString start=/\v\"/ skip=/\v\\\"/ end=/\v\"/ contained containedin=hbsComponent,hbsMustache,hbsMustacheBlock,hbsPencil,hbsElseBlock
 syntax region hbsString matchgroup=hbsString start=/\v\'/ skip=/\v\\\'/ end=/\v\'/ contained containedin=hbsComponent,hbsMustache,hbsMustacheBlock,hbsPencil,hbsElseBlock
 syntax match hbsNumber "\v<\d+>" contained containedin=hbsComponent,hbsMustache,hbsMustacheBlock,hbsPencil,hbsElseBlock
+syntax match hbsBool "\v<(true|false)>" contained containedin=hbsComponent,hbsMustache,hbsMustacheBlock,hbsPencil,hbsElseBlock
 syntax match hbsArg "\v(\@\S+|\S+)\=@=" contained containedin=hbsComponent,hbsMustache,hbsMustacheBlock,hbsPencil,hbsElseBlock
 syntax match hbsOperator "\v(\S+)@<=\=" contained containedin=hbsComponent,hbsMustache,hbsMustacheBlock,hbsPencil,hbsElseBlock
 
@@ -90,6 +94,7 @@ syntax region hbsComment start="\v\{\{\!\-\-" end="\v\-\-\}\}" keepend
 
 highlight link hbsBuiltInHelper Function
 highlight link hbsBuiltInHelperInElse Function
+highlight link hbsControlFlow Function
 highlight link hbsKeyword Keyword
 highlight link hbsOperator Operator
 highlight link hbsDelimiter Delimiter
@@ -98,6 +103,7 @@ highlight link hbsPencilName Statement
 highlight link hbsIdentifier Identifier
 highlight link hbsString String
 highlight link hbsNumber Special
+highlight link hbsBool Boolean
 highlight link hbsHandles Define
 highlight link hbsComponentStatement Define
 highlight link hbsUnescapedHandles Identifier
