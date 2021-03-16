@@ -32,8 +32,8 @@ syntax match hbsBuiltInHelperInElse "\v(\{\{else\ )@<=<(component|with|if|each(\
 syntax match hbsKeyword "\v\s+as\s+" contained containedin=hbsComponent,hbsMustacheBlock,hbsElseBlock
 syntax region hbsStatement matchgroup=hbsDelimiter start="\v\|" end="\v\|" contained containedin=hbsComponent,hbsMustacheBlock,hbsElseBlock
 
-syntax region hbsString matchgroup=hbsString start=/\v\"/ skip=/\v\\\"/ end=/\v\"/ contained containedin=hbsComponent,hbsMustache,hbsMustacheBlock,hbsPencil,hbsElseBlock
-syntax region hbsString matchgroup=hbsString start=/\v\'/ skip=/\v\\\'/ end=/\v\'/ contained containedin=hbsComponent,hbsMustache,hbsMustacheBlock,hbsPencil,hbsElseBlock
+syntax region hbsString matchgroup=hbsString start=/\v\"/ skip=/\v\\\"/ end=/\v\"/ extend contained containedin=hbsComponent,hbsMustache,hbsMustacheBlock,hbsPencil,hbsElseBlock
+syntax region hbsString matchgroup=hbsString start=/\v\'/ skip=/\v\\\'/ end=/\v\'/ extend contained containedin=hbsComponent,hbsMustache,hbsMustacheBlock,hbsPencil,hbsElseBlock
 syntax match hbsNumber "\v<\d+>" contained containedin=hbsComponent,hbsMustache,hbsMustacheBlock,hbsPencil,hbsElseBlock
 syntax match hbsArg "\v(\@\S+|\S+)\=@=" contained containedin=hbsComponent,hbsMustache,hbsMustacheBlock,hbsPencil,hbsElseBlock
 syntax match hbsOperator "\v(\S+)@<=\=" contained containedin=hbsComponent,hbsMustache,hbsMustacheBlock,hbsPencil,hbsElseBlock
