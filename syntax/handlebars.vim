@@ -41,6 +41,53 @@ syntax match hbsOperator "\v(\S+)@<=\=" contained containedin=hbsComponent,hbsMu
 syntax region hbsComment start="\v\{\{\!" end="\v\}\}" keepend
 syntax region hbsComment start="\v\{\{\!\-\-" end="\v\-\-\}\}" keepend
 
+" *Comment	any comment
+
+" *Constant	any constant
+"  String		a string constant: "this is a string"
+"  Character	a character constant: 'c', '\n'
+"  Number		a number constant: 234, 0xff
+"  Boolean	a boolean constant: TRUE, false
+"  Float		a floating point constant: 2.3e10
+
+" *Identifier	any variable name
+"  Function	function name (also: methods for classes)
+
+" *Statement	any statement
+"  Conditional	if, then, else, endif, switch, etc.
+"  Repeat		for, do, while, etc.
+"  Label		case, default, etc.
+"  Operator	"sizeof", "+", "*", etc.
+"  Keyword	any other keyword
+"  Exception	try, catch, throw
+
+" *PreProc	generic Preprocessor
+"  Include	preprocessor #include
+"  Define		preprocessor #define
+"  Macro		same as Define
+"  PreCondit	preprocessor #if, #else, #endif, etc.
+
+" *Type		int, long, char, etc.
+"  StorageClass	static, register, volatile, etc.
+"  Structure	struct, union, enum, etc.
+"  Typedef	A typedef
+
+" *Special	any special symbol
+"  SpecialChar	special character in a constant
+"  Tag		you can use CTRL-] on this
+"  Delimiter	character that needs attention
+"  SpecialComment	special things inside a comment
+"  Debug		debugging statements
+
+" *Underlined	text that stands out, HTML links
+
+" *Ignore		left blank, hidden  |hl-Ignore|
+
+" *Error		any erroneous construct
+
+" *Todo		anything that needs extra attention; mostly the
+" 		keywords TODO FIXME and XXX
+
 highlight link hbsBuiltInHelper Function
 highlight link hbsBuiltInHelperInElse Function
 highlight link hbsKeyword Keyword
@@ -50,7 +97,7 @@ highlight link hbsMustacheName Statement
 highlight link hbsPencilName Statement
 highlight link hbsIdentifier Identifier
 highlight link hbsString String
-highlight link hbsNumber Number
+highlight link hbsNumber Special
 highlight link hbsHandles Define
 highlight link hbsComponentStatement Define
 highlight link hbsUnescapedHandles Identifier
