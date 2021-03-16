@@ -31,7 +31,7 @@ syntax match hbsBuiltInHelperInElse "\v(\{\{else\ )@<=<(component|link\-to)>" co
 syntax match hbsControlFlow "\v(\{\{)@<=<else>( ?)@=" contained containedin=hbsElseBlock
 syntax match hbsControlFlow "\v\(@<=<(if|unless)>" contained containedin=hbsPencil
 syntax match hbsControlFlow "\v(\{\{)@<=<(debugger|unless|yield|outlet|else)>" contained containedin=hbsMustache
-syntax match hbsControlFlow "\v(\{\{[#/]?)@<=<(with|if|each(\-in)?|unless)>" contained containedin=hbsMustacheBlock,hbsElseBlock
+syntax match hbsControlFlow "\v(\{\{[#/]?)@<=<(with|let|if|each(\-in)?|unless)>" contained containedin=hbsMustacheBlock,hbsElseBlock
 syntax match hbsKeyword "\v\s+as\s+" contained containedin=hbsComponent,hbsMustacheBlock,hbsElseBlock
 syntax region hbsStatement matchgroup=hbsDelimiter start="\v\|" end="\v\|" contained containedin=hbsComponent,hbsMustacheBlock,hbsElseBlock
 

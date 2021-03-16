@@ -30,6 +30,11 @@
 
   <:block as |foo, baz|>
     {{foo}}
+
+    {{#let foo.bar as |fooBar|}}
+      <fooBar>
+    {{/let}}
+
     <baz.component />
   </:block>
 </Nested::Component>
