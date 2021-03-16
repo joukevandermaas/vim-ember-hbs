@@ -13,6 +13,14 @@
 <AngleBrackets::-Components::Nested />
 
 <div class="my-css-class">{{test}}</div>
+<span
+  class="
+    some class
+    {{#if (helper-name this.condition)
+      "classes if true"
+      "classes if false"
+    }}
+  "></span>
 
 <Nested::Component
   @arg={{12}}
