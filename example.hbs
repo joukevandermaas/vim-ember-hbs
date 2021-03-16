@@ -14,6 +14,25 @@
 
 <div class="my-css-class">{{test}}</div>
 
+<Nested::Component
+  @arg={{12}}
+  @argB={{hash
+    foo="string"
+    bar=this.property
+    baz=120
+    bax=(fn this.someAction 120)
+  }}
+  as |foo|
+>
+  <:default>
+    named blocks
+  </:default>
+
+  <:block as |foo|>
+    {{foo}}
+  </:block>
+</Nested::Component>
+
 {{#block-component property=@value  prop-erty=this.value string="testing"
   onClick=(action "someAction" withParam) as |returnValue|}}
   {{#each-in foo as |bar, baz|}}
@@ -34,7 +53,8 @@
     </a>
 
     <MyIput type="text" oninput={{action (mut fooBar) value="target.value"}} />
-    <input type="text" oninput={{action (mut fooBar) value="target.value"}}>
+    <input type="text" oninput={{action (mut (fn fooBar 200)) value="target.value"}}>
+    <input {{on 'input' (fn this.doSomething 12 "string")}}
 
     {{helper "string" 123}}
     {{input value="foo"}}
