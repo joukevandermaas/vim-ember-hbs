@@ -7,7 +7,7 @@ syntax cluster htmlPreproc add=hbsComponent,hbsMustache,hbsUnescaped,hbsMustache
 
 syntax match hbsEscapedMustache "\v\\\{\{"
 
-syntax region hbsComponent matchgroup=hbsComponentStatement start="\v\<(\/?):?((\@\a+)|(((\w|-)+::)*\u\a+)|(\a+\.\a+))" end="\v\/?\>" keepend
+syntax region hbsComponent matchgroup=hbsComponentStatement start="\v\<\/?:?\a+(\.\a+|::-?\a+)*" end="\v\/?\>" keepend
 syntax region hbsMustache matchgroup=hbsHandles start="\v\{\{" skip="\v\\\}\}" end="\v\}\}" containedin=hbsComponent keepend
 syntax region hbsMustacheBlock matchgroup=hbsHandles start="\v\{\{[#/]" skip="\v\\\}\}" end="\v\}\}" keepend
 " modern hbs supports {{else <block>}} where <block> starts a new block
