@@ -7,8 +7,8 @@ syntax cluster htmlPreproc add=hbsComponent,hbsMustache,hbsUnescaped,hbsMustache
 
 syntax match hbsEscapedMustache "\v\\\{\{"
 
-syntax region hbsComponent matchgroup=hbsComponentStatement start="\v\<(\/?)((\@\a+)|(((\w|-)+::)*\u\a+)|(\a+\.\a+))" end="\v\/?\>" keepend
-syntax region hbsMustache matchgroup=hbsHandles start="\v\{\{" skip="\v\\\}\}" end="\v\}\}" containedin=hbsComponent keepend
+syntax region hbsComponent matchgroup=hbsComponentStatement start="\v\<\/?:?\a+(\.\a+|::-?\a+)*" end="\v\/?\>" keepend
+syntax region hbsMustache matchgroup=hbsHandles start="\v\{\{" skip="\v\\\}\}" end="\v\}\}" containedin=hbsComponent,hbsString keepend
 syntax region hbsMustacheBlock matchgroup=hbsHandles start="\v\{\{[#/]" skip="\v\\\}\}" end="\v\}\}" keepend
 " modern hbs supports {{else <block>}} where <block> starts a new block
 syntax region hbsElseBlock matchgroup=hbsHandles start="\v\{\{else\ "rs=e-5 skip="\v\\\}\}" end="\v\}\}" keepend
@@ -24,25 +24,77 @@ syntax match hbsUnescapedIdentifier "\v(\{\{\{)@<=<\S+>(\}\}\})" contained conta
 
 syntax match hbsMustacheName "\v(\{\{[#/]?)@<=<\S+>" contained containedin=hbsMustache,hbsMustacheBlock,hbsPencil
 syntax match hbsPencilName "\v(\()@<=<\S+>" contained containedin=hbsMustache,hbsMustacheBlock,hbsPencil
-syntax match hbsBuiltInHelper "\v(\{\{)@<=<else>( ?)@=" contained containedin=hbsElseBlock
-syntax match hbsBuiltInHelper "\v\(@<=<(query-params|mut|get|if|action|unless|unbound|concat)>" contained containedin=hbsPencil
-syntax match hbsBuiltInHelper "\v(\{\{)@<=<(textarea|mut|input|get|debugger|action|unless|input|unbound|yield|outlet|else)>" contained containedin=hbsMustache
-syntax match hbsBuiltInHelper "\v(\{\{[#/]?)@<=<(component|with|if|each(\-in)?|link\-to|unless)>" contained containedin=hbsMustacheBlock,hbsElseBlock
-syntax match hbsBuiltInHelperInElse "\v(\{\{else\ )@<=<(component|with|if|each(\-in)?|link\-to|unless)>" contained containedin=hbsMustacheBlock,hbsElseBlock
+syntax match hbsBuiltInHelper "\v\(@<=<(query-params|mut|fn|array|hash|get|action|unbound|concat)>" contained containedin=hbsPencil
+syntax match hbsBuiltInHelper "\v(\{\{)@<=<(textarea|mut|fn|array|hash|input|get|action|on|input|unbound)>" contained containedin=hbsMustache
+syntax match hbsBuiltInHelper "\v(\{\{[#/]?)@<=<(component|with|link\-to)>" contained containedin=hbsMustacheBlock,hbsElseBlock
+syntax match hbsBuiltInHelperInElse "\v(\{\{else\ )@<=<(component|link\-to)>" contained containedin=hbsMustacheBlock,hbsElseBlock
+syntax match hbsControlFlow "\v(\{\{)@<=<else>( ?)@=" contained containedin=hbsElseBlock
+syntax match hbsControlFlow "\v\(@<=<(if|unless)>" contained containedin=hbsPencil
+syntax match hbsControlFlow "\v(\{\{)@<=<(debugger|unless|yield|outlet|else)>" contained containedin=hbsMustache
+syntax match hbsControlFlow "\v(\{\{[#/]?)@<=<(with|let|if|each(\-in)?|unless)>" contained containedin=hbsMustacheBlock,hbsElseBlock
 syntax match hbsKeyword "\v\s+as\s+" contained containedin=hbsComponent,hbsMustacheBlock,hbsElseBlock
 syntax region hbsStatement matchgroup=hbsDelimiter start="\v\|" end="\v\|" contained containedin=hbsComponent,hbsMustacheBlock,hbsElseBlock
 
 syntax region hbsString matchgroup=hbsString start=/\v\"/ skip=/\v\\\"/ end=/\v\"/ contained containedin=hbsComponent,hbsMustache,hbsMustacheBlock,hbsPencil,hbsElseBlock
 syntax region hbsString matchgroup=hbsString start=/\v\'/ skip=/\v\\\'/ end=/\v\'/ contained containedin=hbsComponent,hbsMustache,hbsMustacheBlock,hbsPencil,hbsElseBlock
 syntax match hbsNumber "\v<\d+>" contained containedin=hbsComponent,hbsMustache,hbsMustacheBlock,hbsPencil,hbsElseBlock
+syntax match hbsBool "\v<(true|false)>" contained containedin=hbsComponent,hbsMustache,hbsMustacheBlock,hbsPencil,hbsElseBlock
 syntax match hbsArg "\v(\@\S+|\S+)\=@=" contained containedin=hbsComponent,hbsMustache,hbsMustacheBlock,hbsPencil,hbsElseBlock
 syntax match hbsOperator "\v(\S+)@<=\=" contained containedin=hbsComponent,hbsMustache,hbsMustacheBlock,hbsPencil,hbsElseBlock
 
 syntax region hbsComment start="\v\{\{\!" end="\v\}\}" keepend
 syntax region hbsComment start="\v\{\{\!\-\-" end="\v\-\-\}\}" keepend
 
+" *Comment	any comment
+
+" *Constant	any constant
+"  String		a string constant: "this is a string"
+"  Character	a character constant: 'c', '\n'
+"  Number		a number constant: 234, 0xff
+"  Boolean	a boolean constant: TRUE, false
+"  Float		a floating point constant: 2.3e10
+
+" *Identifier	any variable name
+"  Function	function name (also: methods for classes)
+
+" *Statement	any statement
+"  Conditional	if, then, else, endif, switch, etc.
+"  Repeat		for, do, while, etc.
+"  Label		case, default, etc.
+"  Operator	"sizeof", "+", "*", etc.
+"  Keyword	any other keyword
+"  Exception	try, catch, throw
+
+" *PreProc	generic Preprocessor
+"  Include	preprocessor #include
+"  Define		preprocessor #define
+"  Macro		same as Define
+"  PreCondit	preprocessor #if, #else, #endif, etc.
+
+" *Type		int, long, char, etc.
+"  StorageClass	static, register, volatile, etc.
+"  Structure	struct, union, enum, etc.
+"  Typedef	A typedef
+
+" *Special	any special symbol
+"  SpecialChar	special character in a constant
+"  Tag		you can use CTRL-] on this
+"  Delimiter	character that needs attention
+"  SpecialComment	special things inside a comment
+"  Debug		debugging statements
+
+" *Underlined	text that stands out, HTML links
+
+" *Ignore		left blank, hidden  |hl-Ignore|
+
+" *Error		any erroneous construct
+
+" *Todo		anything that needs extra attention; mostly the
+" 		keywords TODO FIXME and XXX
+
 highlight link hbsBuiltInHelper Function
 highlight link hbsBuiltInHelperInElse Function
+highlight link hbsControlFlow Function
 highlight link hbsKeyword Keyword
 highlight link hbsOperator Operator
 highlight link hbsDelimiter Delimiter
@@ -50,7 +102,8 @@ highlight link hbsMustacheName Statement
 highlight link hbsPencilName Statement
 highlight link hbsIdentifier Identifier
 highlight link hbsString String
-highlight link hbsNumber Number
+highlight link hbsNumber Special
+highlight link hbsBool Boolean
 highlight link hbsHandles Define
 highlight link hbsComponentStatement Define
 highlight link hbsUnescapedHandles Identifier

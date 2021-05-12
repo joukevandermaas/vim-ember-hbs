@@ -13,6 +13,41 @@
 <AngleBrackets::-Components::Nested />
 
 <div class="my-css-class">{{test}}</div>
+<span
+  class="
+    some class
+    {{if (helper-name this.condition)
+      "classes if true"
+      "classes if false"
+    }}
+  "></span>
+
+<Nested::Component
+  @arg={{12}}
+  @doAction={{fn this.someAction 120}}
+  @argB={{hash
+    foo="string"
+    bar=true
+    baz=120
+    yolo=(array 12 "string" (hash foo=this.something))
+    bax=(fn this.someAction 120)
+  }}
+  as |foo|
+>
+  <:default>
+    named blocks {{false}}
+  </:default>
+
+  <:block as |foo, baz|>
+    {{foo}}
+
+    {{#let foo.bar as |fooBar|}}
+      <fooBar>
+    {{/let}}
+
+    <baz.component />
+  </:block>
+</Nested::Component>
 
 {{#block-component property=@value  prop-erty=this.value string="testing"
   onClick=(action "someAction" withParam) as |returnValue|}}
@@ -34,7 +69,8 @@
     </a>
 
     <MyIput type="text" oninput={{action (mut fooBar) value="target.value"}} />
-    <input type="text" oninput={{action (mut fooBar) value="target.value"}}>
+    <input type="text" oninput={{action (mut (fn fooBar 200)) value="target.value"}}>
+    <input {{on 'input' (fn this.doSomething 12 "string")}}
 
     {{helper "string" 123}}
     {{input value="foo"}}
